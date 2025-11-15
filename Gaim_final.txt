@@ -1,0 +1,2434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sponsor Hub — Prototype (Organizer pitchbooks + Sponsors Directory)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<style>
+  :root {
+    --royal: #525CEB; /* Brighter, more vibrant blue */
+    --royal-dark: #414AD3; /* Darker shade for hover */
+    --black: #1A202C; /* Deep charcoal for primary text */
+    --text-primary: #2D3748; /* Slightly lighter primary text */
+    --text-muted: #718096; /* Soft grey for muted text */
+    --bg: #F0F4F8; /* Light grey-blue background */
+    --card: #ffffff; /* Pure white cards */
+    --border-color: #E2E8F0; /* Lighter, subtle border */
+    --input-bg: #FDFDFF; /* Very light input background */
+    --accent-green: #38A169; /* Richer green for accent */
+    --accent-green-tint: rgba(56, 161, 105, 0.1);
+    --royal-tint: rgba(82, 92, 235, 0.1); /* Adjusted tint */
+    --gradient-light: linear-gradient(180deg, #F8FAFC 0%, #F0F4F8 100%);
+    --gradient-royal: linear-gradient(180deg, #5D67EE 0%, #525CEB 100%);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    margin: 0;
+    background: var(--gradient-light); /* Subtle gradient background */
+    color: var(--text-primary);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  header {
+    background: var(--card);
+    color: var(--black);
+    padding: 14px 24px; /* Increased horizontal padding */
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05); /* Softer, larger shadow */
+  }
+
+  .topbar {
+    max-width: 1200px; /* Wider topbar */
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .brand {
+    font-weight: 700;
+    font-size: 20px; /* Larger brand name */
+    color: var(--royal);
+    letter-spacing: -0.5px;
+  }
+
+  .tagline {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .profile {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    cursor: pointer;
+    background: var(--royal-tint);
+    padding: 8px 14px; /* Slightly more padding */
+    border-radius: 999px;
+    border: 1px solid rgba(82, 92, 235, 0.15); /* Stronger tint border */
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .profile:hover {
+    background: rgba(82, 92, 235, 0.15);
+    border-color: rgba(82, 92, 235, 0.25);
+  }
+
+  .profile .roleText {
+    font-weight: 600;
+    color: var(--royal);
+  }
+
+  .container {
+    max-width: 1200px; /* Wider container */
+    margin: 32px auto; /* Increased margin */
+    padding: 0 24px; /* Increased padding */
+  }
+
+  .card {
+    background: var(--card);
+    padding: 28px; /* Increased padding */
+    border-radius: 16px; /* More rounded corners */
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08); /* Softer, larger shadow */
+    border: 1px solid var(--border-color); /* Subtle border */
+  }
+
+  h2 {
+    font-weight: 700;
+    color: var(--black);
+    margin-top: 0;
+    margin-bottom: 24px; /* Increased margin */
+    font-size: 24px; /* Larger heading */
+  }
+  
+  label {
+    display: block;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+  }
+
+  .muted {
+    color: var(--text-muted);
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 14px 16px; /* More padding */
+    border-radius: 10px; /* More rounded */
+    border: 1px solid var(--border-color);
+    background: var(--card);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03); /* Subtle inner shadow */
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+  }
+  input::placeholder, textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--royal);
+    background: var(--card);
+    box-shadow: 0 0 0 4px var(--royal-tint), inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Enhanced focus shadow */
+    outline: none;
+  }
+  input[type="file"] {
+    padding: 10px 12px; /* Slightly less padding for file input */
+    background: var(--bg);
+    line-height: 1.4;
+  }
+  input[type="file"]::file-selector-button {
+    background: var(--royal); /* Blue file selector button */
+    color: #fff;
+    border: none;
+    padding: 8px 14px; /* More padding */
+    border-radius: 8px; /* More rounded */
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 12px;
+    transition: background 0.2s ease, transform 0.1s ease;
+  }
+  input[type="file"]::file-selector-button:hover {
+    background: var(--royal-dark);
+    transform: translateY(-1px);
+  }
+  
+  textarea {
+    min-height: 100px; /* Taller textarea */
+    line-height: 1.5;
+    resize: vertical;
+  }
+
+  button {
+    background: var(--royal);
+    color: #fff;
+    border: none;
+    padding: 12px 20px; /* More padding */
+    border-radius: 10px; /* More rounded */
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px; /* Larger font */
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 16px rgba(82, 92, 235, 0.25); /* Stronger shadow */
+  }
+  button:hover {
+    background: var(--royal-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(82, 92, 235, 0.3);
+  }
+  button:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(82, 92, 235, 0.2);
+  }
+
+  .ghost {
+    background: var(--bg); /* Lighter background for ghost button */
+    color: var(--royal);
+    border: 1px solid var(--border-color);
+    padding: 11px 18px; /* Adjusted padding to match */
+    border-radius: 10px;
+    box-shadow: none;
+  }
+  .ghost:hover {
+    background: #EBF2F7;
+    border-color: #DDE5ED;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  .ghost:active {
+    transform: scale(0.98);
+    box-shadow: none;
+  }
+  
+  /* --- New Styles for Role Cards --- */
+  .role-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px; /* Increased gap */
+    margin-top: 32px; /* Increased margin */
+  }
+
+  .role-card {
+    background: var(--card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px; /* More rounded */
+    padding: 32px; /* Increased padding */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04); /* Subtle shadow */
+  }
+  .role-card:hover {
+    transform: translateY(-8px); /* More pronounced lift */
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1); /* Stronger shadow */
+    border-color: var(--royal);
+  }
+
+  .role-card-icon {
+    width: 56px; /* Larger icon */
+    height: 56px; /* Larger icon */
+    border-radius: 12px; /* More rounded */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px; /* Increased margin */
+  }
+  .role-card-icon.sponsor {
+    background: var(--royal-tint);
+    color: var(--royal);
+  }
+  .role-card-icon.organizer {
+    background: var(--accent-green-tint);
+    color: var(--accent-green);
+  }
+  .role-card-icon svg {
+    width: 28px; /* Larger SVG icon */
+    height: 28px; /* Larger SVG icon */
+  }
+  .role-card h3 {
+    margin: 0 0 10px 0; /* Adjusted margin */
+    color: var(--black);
+    font-size: 20px; /* Larger heading */
+    font-weight: 600;
+  }
+  .role-card p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  /* --- End New Styles --- */
+
+  /* --- New Hero Styles --- */
+  .hero-section {
+    display: flex; /* Changed to flex for vertical centering of content */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0; /* More vertical padding */
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 32px;
+    text-align: center;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%); /* Light subtle gradient */
+    border-radius: 16px; /* Rounded corners for hero */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  }
+  .hero-text h2 {
+    font-size: 36px; /* Larger, more impactful hero heading */
+    line-height: 1.2;
+    margin-bottom: 16px;
+    color: var(--royal);
+    max-width: 700px;
+  }
+  .hero-text p {
+    font-size: 18px; /* Larger hero paragraph */
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 600px;
+  }
+  
+  /* --- End New Hero Styles --- */
+  
+  /* --- Browse Screen Styles (New) --- */
+  .browse-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr; /* Was 3 columns, now 2 */
+    gap: 24px; /* Increased gap */
+  }
+  
+  .browse-filters .card {
+    padding: 20px; /* Increased padding */
+    background: var(--card);
+    border: 1px solid var(--border-color);
+  }
+  
+  .filter-group {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .filter-group:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .filter-group h4 {
+    margin: 0 0 16px 0; /* More spacing */
+    font-size: 16px;
+    color: var(--black);
+  }
+  .filter-group label {
+    font-weight: 500;
+    font-size: 15px; /* Larger filter labels */
+    display: flex;
+    align-items: center;
+    gap: 10px; /* More spacing */
+    margin-bottom: 10px;
+    color: var(--text-primary);
+  }
+  .filter-group input[type="radio"], .filter-group input[type="checkbox"] {
+    width: auto;
+    margin-bottom: 0;
+    accent-color: var(--royal); /* Blue accent for radio/checkbox */
+    transform: scale(1.1); /* Slightly larger */
+  }
+  
+  .browse-main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; /* More spacing */
+  }
+  .browse-main-header .muted {
+    font-size: 15px;
+  }
+  
+  /* New Event Card Styles */
+  .event-card-new {
+    display: grid; /* CHANGED to grid */
+    grid-template-columns: auto 1fr auto; /* Logo | Info | Actions */
+    align-items: flex-start;
+    gap: 20px; /* Increased gap */
+    background: var(--card);
+    border: 1px solid var(--border-color);
+    padding: 20px; /* Increased padding */
+    border-radius: 12px; /* More rounded */
+    margin-bottom: 16px; /* Increased margin */
+    transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  }
+  .event-card-new:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    border-color: var(--royal);
+    transform: translateY(-2px);
+  }
+  
+  .event-card-logo {
+    width: 56px; /* Larger logo */
+    height: 56px;
+    border-radius: 10px;
+    background: var(--royal-tint);
+    color: var(--royal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .event-card-logo svg {
+    width: 28px; /* Larger SVG icon */
+    height: 28px;
+  }
+  
+  .event-card-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .event-card-info h3 {
+    margin: 0 0 6px 0; /* Adjusted margin */
+    font-size: 18px; /* Larger heading */
+    font-weight: 600;
+    color: var(--black);
+  }
+  .event-card-meta {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 12px; /* Adjusted margin */
+  }
+  .event-card-tags {
+    margin-bottom: 16px; /* Adjusted margin */
+  }
+  
+  /* Modified .event-card-stats */
+  .event-card-stats {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping */
+    gap: 16px; /* Adjusted gap */
+    font-size: 13px; /* Slightly larger stats */
+    color: var(--text-muted);
+    border-top: none; /* REMOVED top border */
+    padding-top: 0; /* REMOVED padding */
+    margin-top: 0; /* REMOVED margin */
+    align-items: center; /* Vertically center the stat items */
+  }
+  
+  /* NEW .stat-item styles */
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+  }
+  .stat-item svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2;
+    color: var(--text-muted);
+  }
+  .stat-item strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  
+  /* NEW .event-card-header styles */
+  .event-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align actions to the top */
+    gap: 16px;
+    margin-bottom: 12px; /* Space before tags */
+  }
+  .event-card-header-left {
+    flex: 1;
+    min-width: 0;
+  }
+  .event-card-header-left h3 {
+    margin-bottom: 4px; /* Tighter spacing */
+  }
+  .event-card-header-left .event-card-meta {
+    margin-bottom: 0; /* Remove bottom margin */
+  }
+
+  /* NEW .event-card-footer block */
+  .event-card-footer {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 16px;
+    margin-top: 16px;
+  }
+  
+  /* UPDATED this block for the "Select" checkbox */
+  .event-card-actions-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .event-card-actions-inline label {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--royal);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+  .event-card-actions-inline input[type="checkbox"] {
+    accent-color: var(--royal);
+    transform: scale(1.1);
+  }
+  
+  /* NEW stacked actions block */
+  .event-card-actions-stacked {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 130px; /* Give a fixed width */
+    flex-shrink: 0;
+    align-items: flex-end; /* Align "Select" to the right */
+  }
+  .event-card-actions-stacked button {
+    color: var(--royal);
+    background: var(--bg);
+    border: 1px solid var(--border-color);
+    padding: 8px 14px;
+    font-size: 14px;
+    box-shadow: none;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    width: 100%; /* Make buttons fill the column */
+  }
+  .event-card-actions-stacked button:hover {
+    background: #EBF2F7;
+    border-color: #DDE5ED;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+  .event-card-actions-stacked button:active {
+    transform: scale(0.98);
+  }
+  
+  /* Featured Card (for Analysis Page) */
+  .featured-card {
+    display: flex;
+    gap: 16px; /* Increased gap */
+    align-items: flex-start; /* Align items to start */
+    background: var(--card);
+    padding: 16px; /* Increased padding */
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 12px;
+    transition: background 0.2s, box-shadow 0.2s, border-color 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+  .featured-card:hover {
+    background: #FBFDFF;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    border-color: #DDE5ED;
+  }
+  .featured-card-icon {
+    width: 44px; /* Larger icon */
+    height: 44px;
+    border-radius: 8px;
+    background: var(--royal-tint);
+    color: var(--royal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .featured-card-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  .featured-card-info {
+    min-width: 0;
+  }
+  .featured-card-info h5 {
+    margin: 0 0 4px 0;
+    font-size: 15px; /* Larger heading */
+    font-weight: 600;
+    color: var(--black);
+    white-space: normal; /* Allow wrap */
+  }
+  .featured-card-info p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-muted);
+    white-space: normal; /* Allow wrap */
+    line-height: 1.5;
+  }
+  
+  .tag {
+    display: inline-block;
+    padding: 7px 12px; /* Increased padding */
+    border-radius: 999px;
+    background: var(--royal-tint);
+    color: var(--royal);
+    font-size: 13px; /* Slightly larger tag font */
+    font-weight: 500;
+    margin-right: 8px; /* Increased margin */
+    margin-bottom: 6px; /* For wrapping */
+  }
+
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+    gap: 20px; 
+    align-items: stretch; 
+  }
+  
+  /* --- NEW styles for Comparison Dashboard --- */
+  .dashboard-container {
+    margin-top: 24px;
+  }
+  
+  .dashboard-table {
+    display: grid;
+    border-left: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+  
+  .dashboard-cell {
+    padding: 14px;
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    background: var(--card);
+  }
+  
+  .dashboard-cell.header {
+    background: #F8FAFC; /* Light header background */
+  }
+  
+  .dashboard-cell.header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--black);
+  }
+  
+  .dashboard-cell.factor {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text-primary);
+    background: #FDFEFF;
+    display: flex;
+    align-items: center;
+  }
+  
+  .dashboard-score {
+    display: block;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--royal);
+    margin-bottom: 4px;
+  }
+  
+  .dashboard-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  
+  /* --- NEW styles for Dashboard Actions --- */
+  .dashboard-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+    padding: 14px;
+  }
+  .dashboard-actions button {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  /* --- End new styles --- */
+
+  .top-reco {
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px dashed var(--royal-tint);
+    background: linear-gradient(180deg, #fff, #f8faff); /* Subtle gradient */
+  }
+
+  .nav-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px; /* Increased margin */
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  /* Chat Modal */
+  .chat-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55); /* Darker overlay */
+    z-index: 90;
+    backdrop-filter: blur(6px); /* More blur */
+  }
+
+  .chat-window {
+    width: 90%;
+    max-width: 900px;
+    background: white;
+    border-radius: 16px; /* More rounded */
+    padding: 24px; /* Increased padding */
+    box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+  }
+
+  .messages {
+    height: 380px; /* Taller chat window */
+    overflow-y: auto;
+    padding: 16px; /* More padding */
+    border-radius: 12px; /* More rounded */
+    border: 1px solid var(--border-color);
+    background: #F8FAFC; /* Lighter chat background */
+  }
+
+  .msg {
+    margin-bottom: 12px; /* More spacing */
+    display: flex;
+    align-items: flex-end; /* Align bubbles to bottom */
+  }
+  .msg.you {
+    justify-content: flex-end;
+  }
+
+  .bubble {
+    display: inline-block;
+    padding: 12px 18px; /* More padding */
+    border-radius: 24px; /* More rounded */
+    max-width: 75%;
+    line-height: 1.5;
+    font-size: 15px;
+  }
+  .bubble.you {
+    background: var(--royal);
+    color: white;
+    border-bottom-right-radius: 8px; /* Larger chat tail */
+    box-shadow: 0 4px 12px rgba(82, 92, 235, 0.2);
+  }
+  .bubble.other {
+    background: #EBF2F7; /* Lighter bubble */
+    border: none;
+    color: var(--text-primary);
+    border-bottom-left-radius: 8px; /* Larger chat tail */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .sponsor-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px; /* More padding */
+    border-radius: 10px; /* More rounded */
+    border: 1px solid var(--border-color);
+    margin-bottom: 10px;
+    background: var(--card);
+    transition: box-shadow 0.2s, border-color 0.2s, transform 0.1s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+  .sponsor-row:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+    border-color: var(--royal-tint);
+    transform: translateY(-2px);
+  }
+
+  .small {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .active-badge {
+    display: inline-block;
+    padding: 5px 9px; /* More padding */
+    border-radius: 999px;
+    background: var(--accent-green-tint); /* Green for active */
+    color: var(--accent-green);
+    font-weight: 600;
+    font-size: 12px;
+    margin-left: 8px;
+  }
+
+  /* Social modal */
+  .social-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(4, 8, 20, 0.6); /* Darker overlay */
+    z-index: 120;
+    backdrop-filter: blur(6px); /* More blur */
+  }
+
+  .social-panel {
+    width: 90%;
+    max-width: 800px; /* Wider panel */
+    background: white;
+    border-radius: 16px; /* More rounded */
+    padding: 28px; /* Increased padding */
+    box-shadow: 0 30px 80px rgba(2, 6, 23, 0.45);
+  }
+
+  .social-list {
+    max-height: 250px; /* Taller list */
+    overflow-y: auto;
+    margin-top: 12px;
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 12px;
+    background: #F8FAFC;
+  }
+
+  .social-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px; /* More padding */
+    border-radius: 10px;
+    border: 1px solid #F0F4F8; /* Lighter border */
+    margin-bottom: 10px;
+    background: var(--card);
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.02);
+  }
+  .social-card:hover {
+    background: #FBFDFF;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  .social-card .social-field {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* --- New Loading Spinner Styles --- */
+  .loading-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.85); /* Slightly less opaque */
+    z-index: 9999; /* Higher z-index */
+    backdrop-filter: blur(6px); /* More blur */
+  }
+  .spinner {
+    width: 60px; /* Larger spinner */
+    height: 60px;
+    border: 6px solid rgba(82, 92, 235, 0.2); /* Thicker, bluer */
+    border-top-color: var(--royal);
+    border-radius: 50%;
+    animation: spin 0.8s ease-in-out infinite; /* Slightly faster */
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  /* --- End Loading Spinner Styles --- */
+
+  /* Custom Alert/Confirm Modals */
+  #customAlertModal, #customConfirmModal {
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.55); z-index:200; backdrop-filter: blur(6px); padding: 16px;
+  }
+  #customAlertModal > div, #customConfirmModal > div {
+    background:white; border-radius:16px; padding:28px; width:90%; max-width:500px;
+    box-shadow:0 30px 80px rgba(0,0,0,0.25);
+  }
+  #customAlertModal h3, #customConfirmModal h3 {
+    margin-top:0; margin-bottom:16px; color: var(--black); font-size: 20px;
+  }
+  #customAlertModal div, #customConfirmModal div {
+    white-space: pre-wrap; line-height: 1.6; color: var(--text-primary); max-height: 60vh; overflow-y: auto;
+    font-size: 15px;
+  }
+  #customAlertModal button, #customConfirmModal button {
+    margin-top: 24px; width: 100%;
+  }
+  #customConfirmModal .button-row {
+    display:flex; gap:12px; margin-top: 24px;
+  }
+
+  /* Re-added scale styles */
+  .ai-point-scale {
+    width: 100%;
+    height: 6px; /* Slim bar */
+    background: var(--royal-tint);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-top: 10px; /* Spacing */
+  }
+  .ai-point-bar {
+    height: 100%;
+    background: var(--gradient-royal); /* Gradient for the bar */
+    border-radius: 99px;
+    transition: width 0.5s ease-out;
+  }
+
+
+  @media (max-width: 920px) {
+    .compare-grid {
+      grid-template-columns: 1fr;
+    }
+    header, .container {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+    .browse-grid {
+      grid-template-columns: 1fr;
+    }
+    .browse-filters, .browse-sidebar {
+      display: none; /* Hide filters and sidebar on mobile for simplicity */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    #screenOrganizer > div[style*="grid"] {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .role-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-section {
+      padding: 30px 0;
+      margin-bottom: 24px;
+    }
+    .hero-text h2 {
+      font-size: 28px;
+    }
+    .hero-text p {
+      font-size: 16px;
+    }
+    .card {
+      padding: 20px;
+      border-radius: 12px;
+    }
+    h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    input, select, textarea, button {
+      padding: 12px 14px;
+      font-size: 15px;
+      border-radius: 8px;
+    }
+    .ghost {
+      padding: 11px 13px;
+    }
+    .role-card {
+      padding: 24px;
+      border-radius: 12px;
+    }
+    .role-card-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+    }
+    .role-card-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+    .role-card h3 {
+      font-size: 18px;
+    }
+    .role-card p {
+      font-size: 14px;
+    }
+    .event-card-new {
+      padding: 16px;
+      gap: 16px;
+      border-radius: 10px;
+      grid-template-columns: auto 1fr; /* Stack actions on mobile */
+    }
+    .event-card-actions-stacked {
+      grid-column: 2 / 3; /* Span actions under info */
+      width: 100%;
+      flex-direction: row; /* Make buttons side-by-side */
+    }
+    .event-card-actions-stacked button {
+      flex: 1; /* Make buttons share space */
+    }
+    .event-card-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .event-card-logo {
+      width: 48px;
+      height: 48px;
+    }
+    .event-card-logo svg {
+      width: 24px;
+      height: 24px;
+    }
+    .event-card-info h3 {
+      font-size: 16px;
+    }
+    .event-card-meta {
+      font-size: 13px;
+    }
+    .event-card-stats {
+      gap: 12px;
+      font-size: 12px;
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+    .tag {
+      padding: 5px 9px;
+      font-size: 12px;
+    }
+    .chat-window, .social-panel {
+      padding: 20px;
+      border-radius: 12px;
+    }
+    .messages, .social-list {
+      padding: 12px;
+      border-radius: 10px;
+    }
+    .bubble {
+      padding: 10px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+    .bubble.you {
+      border-bottom-right-radius: 6px;
+    }
+    .bubble.other {
+      border-bottom-left-radius: 6px;
+    }
+    .dashboard-table {
+      grid-template-columns: 1fr; /* Stack dashboard on mobile */
+    }
+    .dashboard-cell.header, .dashboard-cell.factor {
+      display: none; /* Hide headers on mobile */
+    }
+  }
+</style>
+
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="topbar">
+    <div>
+      <div class="brand">Sponsor Hub</div>
+      <div class="tagline">Connecting Brands With Moments That Matter</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div id="profileButton" class="profile" title="Click to toggle role">
+        <div class="roleText" id="profileRole">Sponsor</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- New Loading Spinner Element -->
+<div id="loadingSpinner" class="loading-modal" style="display: none;">
+  <div class="spinner"></div>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+  <div class="card" id="screenCard">
+    
+    <!-- role chooser -->
+    <div id="screenRole">
+
+      <!-- New Hero Section -->
+      <div class="hero-section">
+        <div class="hero-text">
+          <h2>Tired of endless sponsorship calls?</h2>
+          <p class="muted">Whether you're making them or receiving them, we have the perfect solution for you.</p>
+        </div>
+      </div>
+      
+      <h2>Welcome to Sponsor Hub</h2>
+      <p class="muted">Are you here to find events, or to find sponsors? Select your role to get started.</p>
+      
+      <!-- New Role Card Grid -->
+      <div class="role-grid">
+        <!-- Sponsor Card -->
+        <div class="role-card" id="beSponsor">
+          <div class="role-card-icon sponsor">
+            <!-- Heroicon: building-office-2 -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6.75h1.5m-1.5 3h1.5m-1.5 3h1.5M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+            </svg>
+          </div>
+          <h3>I'm a Sponsor</h3>
+          <p>Discover events, analyze opportunities, and connect with organizers.</p>
+        </div>
+        
+        <!-- Organizer Card -->
+        <div class="role-card" id="beOrganizer">
+          <div class="role-card-icon organizer">
+            <!-- Heroicon: calendar-days -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+            </svg>
+          </div>
+          <h3>I'm an Organizer</h3>
+          <p>List your event, find active sponsors, and manage your pitches.</p>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- Sponsor screen: now includes Brand name + industry -->
+    <div id="screenSponsor" class="hidden">
+      <h2>Sponsor — What are you looking for?</h2>
+      
+      <!-- Cleaned up form labels and spacing -->
+      <label for="sBrand">Brand name (required)</label>
+      <input id="sBrand" placeholder="Enter your brand name" />
+      
+      <label for="sIndustry">Industry (optional)</label>
+      <input id="sIndustry" placeholder="e.g., FMCG, Beverages, Fintech" />
+      
+      <label for="sBudget">Budget (₹)</label>
+      <input id="sBudget" type="number" value="100000" />
+      
+      <label for="sObjective">Objective</label>
+      <select id="sObjective">
+        <option value="awareness">Brand awareness</option>
+        <option value="activation">Product activation / sampling</option>
+        <option value="leadgen">Lead generation</option>
+        <option value="csr">CSR / community</option>
+      </select>
+      
+      <label for="sLocation">Target location (optional)</label>
+      <input id="sLocation" placeholder="City or region (optional)" />
+      
+      <div class="nav-footer">
+        <div><button id="toBrowse">Browse matched events</button></div>
+        <div><button id="backToHome" class="ghost">Back</button></div>
+      </div>
+      <p id="sMsg" class="muted" style="margin-top:10px"></p>
+    </div>
+
+    <!-- Organizer screen -->
+    <div id="screenOrganizer" class="hidden">
+      <h2>Organizer — submit event & pitch sponsors</h2>
+
+      <!-- Form and list now stack on mobile -->
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:20px">
+        <div>
+          <label for="o_name">Event name</label><input id="o_name" />
+          <label for="o_inst">Institution</label><input id="o_inst" />
+          <label for="o_loc">Location</label><input id="o_loc" />
+          <label for="o_type">Type</label><input id="o_type" placeholder="Tech / Cultural / Sports" />
+          
+          <!-- New Gemini Feature Button -->
+          <div style="margin-bottom: 16px;">
+            <button id="generateEventDetails" class="ghost" type="button" style="width: 100%;">✨ Generate Description & Tags</button>
+          </div>
+          
+          <!-- New Form Fields for AI Content -->
+          <label for="o_desc">Event Description</label>
+          <textarea id="o_desc" rows="4" placeholder="A compelling description of your event... (Click generate above!)"></textarea>
+          
+          <label for="o_tags">Event Tags (comma-separated)</label>
+          <input id="o_tags" placeholder="e.g., tech, startups, music" />
+          
+          <label for="o_foot">Footfall last year</label><input id="o_foot" type="number" />
+          <label for="o_money">Money to raise (₹)</label><input id="o_money" type="number" />
+          
+          <div>
+            <label for="pitchbookFile">Pitchbook (PDF)</label>
+            <input id="pitchbookFile" type="file" accept="application/pdf" />
+            <div id="pitchInfo" class="small" style="margin-top:-10px; margin-bottom: 16px;">No pitchbook uploaded.</div>
+          </div>
+          
+          <div style="margin-top:12px;display:flex;flex-wrap: wrap; gap:8px">
+            <button id="publishAndStay" class="ghost">Publish event</button>
+            <button id="publishAndBack">Publish & Back</button>
+            <button id="backToHome2" class="ghost">Back</button>
+          </div>
+          <p id="oMsg" class="muted" style="margin-top:10px"></p>
+        </div>
+
+        <!-- Sponsors directory -->
+        <div class="card" style="padding:16px; background: #fafcff; border: 1px solid var(--border-color);">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:700; font-size: 16px;">Sponsors directory</div>
+            <div class="small muted">Active partners</div>
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="sFilterIndustry" class="small muted">Filter industry</label>
+            <select id="sFilterIndustry" style="margin-bottom: 8px;">
+              <option value="">All industries</option>
+            </select>
+          </div>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <button id="refreshSponsors" class="ghost">Refresh</button>
+            <button id="clearFilters" class="ghost">Clear</button>
+          </div>
+
+          <!-- New AI Suggestion Button -->
+          <button id="aiSuggestSponsors" class="ghost" style="width: 100%; margin-top: 10px;">✨ AI Suggest Sponsors</button>
+
+          <!-- New Container for AI Suggestions -->
+          <div id="aiSponsorSuggestions" style="margin-top: 16px;"></div>
+
+          <div id="sponsorsList" style="margin-top:16px; max-height: 400px; overflow-y: auto; padding-right: 5px;"></div>
+
+          <div class="small muted" style="margin-top:12px; background: #fff; padding: 8px; border-radius: 6px; border: 1px solid var(--border-color);">
+            Tip: Upload pitchbook and click <strong>Pitch</strong> to send your pitch to a sponsor (simulated).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Browse (sponsor view) -->
+    <div id="screenBrowse" class="hidden">
+      <!-- Header + Browse Grid -->
+      <div class="browse-grid" id="browseGrid">
+        
+        <!-- Left Column: Filters -->
+        <div class="browse-filters">
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h4 style="margin: 0;">All Filters</h4>
+              <button class="ghost" style="padding: 4px 8px; font-size: 13px;" id="clearSelection">Clear</button>
+            </div>
+            
+            <div class="filter-group">
+              <h4>Event Type</h4>
+              <label><input type="radio" name="filter_type" value="" checked> All</label>
+              <label><input type="radio" name="filter_type" value="Tech"> Tech</label>
+              <label><input type="radio" name="filter_type" value="Cultural"> Cultural</label>
+              <label><input type="radio" name="filter_type" value="Sports"> Sports</label>
+              <label><input type="radio" name="filter_type" value="Conference"> Conference</label>
+            </div>
+            
+            <div class="filter-group">
+              <h4>Location</h4>
+              <input id="filterLocation" placeholder="Enter city..." style="margin-bottom: 0;" />
+            </div>
+            
+            <div class="filter-group">
+              <h4>Target Budget</h4>
+              <label><input type="radio" name="filter_budget" value="" checked> All</label>
+              <label><input type="radio" name="filter_budget" value="100000"> &lt; ₹1,00,000</label>
+              <label><input type="radio" name="filter_budget" value="200000"> &lt; ₹2,00,000</label>
+              <label><input type="radio" name="filter_budget" value="500000"> &gt; ₹2,00,000</label>
+            </div>
+            
+            <!-- Analyze Button -->
+            <div style="margin-bottom: 10px;">
+              <button id="analyzeBtn" style="width: 100%;">✨ Compare & Analyze</button>
+            </div>
+            
+            <button class="ghost" id="startOver" style="width: 100%;">Back to Home</button>
+          </div>
+        </div>
+        
+        <!-- Middle Column: Event List -->
+        <div class="browse-main">
+          <div class="browse-main-header" style="justify-content: flex-end;">
+            <div class="muted" id="selCount">0 selected</div>
+          </div>
+          
+          <div id="eventsContainer" style="margin-top:12px">
+            <!-- Events populated here -->
+          </div>
+        </div>
+        
+      </div>
+
+      <!-- NEW SCREEN FOR DETAILED ANALYSIS (inside screenBrowse) -->
+      <div id="screenAnalysis" class="hidden">
+        <div class="browse-main-header" style="padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+          <h2 style="margin: 0;">Comparison Dashboard</h2>
+          <button id="backToBrowse" class="ghost">Back to Events</button>
+        </div>
+        <div id="detailedAnalysisContainer" style="margin-top: 24px;">
+          <!-- Dashboard will be built here -->
+        </div>
+      </div>
+      <!-- END NEW SCREEN -->
+    </div>
+
+  </div>
+</div>
+
+<!-- Chat modal -->
+<div id="chatModal" class="chat-modal" aria-hidden="true">
+  <div class="chat-window">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div>
+        <div id="chatTitle" style="font-weight:800; font-size: 18px; color: var(--black);">Chat</div>
+        <div id="chatSub" class="muted">Organizer · Location · ₹target</div>
+      </div>
+      <div><button id="closeChat" class="ghost">Close</button></div>
+    </div>
+    
+    <!-- New AI Negotiation Button -->
+    <button id="generateNegotiationPoints" class="ghost" style="width: 100%; margin-bottom: 10px; display: none;">✨ Get AI Negotiation Points</button>
+    
+    <div id="messages" class="messages" aria-live="polite"></div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <input id="chatInput" placeholder="Write message..." style="flex:1; margin-bottom: 0;" />
+      <button id="sendChat">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- Social Outreach modal -->
+<div id="socialModal" class="social-modal" aria-hidden="true">
+  <div class="social-panel" role="dialog" aria-modal="true">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-weight:800; font-size: 18px; color: var(--royal);" id="socialTitle">Reach out on Socials</div>
+        <div class="muted" id="socialSub">Choose a brand to draft messages (Instagram DM + LinkedIn)</div>
+      </div>
+      <div><button id="closeSocial" class="ghost">Close</button></div>
+    </div>
+
+    <div style="margin-top:12px">
+      <div class="small muted">Available brands</div>
+      <div id="socialSponsors" class="social-list"></div>
+    </div>
+
+    <div id="socialDrafts" style="margin-top:12px"></div>
+  </div>
+</div>
+
+<script>
+/* -------------------------
+  Profile + screens
+--------------------------*/
+let profile = {role: 'Sponsor'}; // Sponsor | Event
+const profileRoleEl = document.getElementById('profileRole');
+const profileBtn = document.getElementById('profileButton');
+function updateProfileUI(){
+  profileRoleEl.innerText = (profile.role==='Sponsor') ? 'Sponsor' : 'Event';
+}
+updateProfileUI();
+profileBtn.onclick = ()=>{
+  profile.role = (profile.role==='Sponsor') ? 'Event' : 'Sponsor';
+  updateProfileUI();
+  showScreen('screenRole');
+};
+
+function hideAllScreens(){
+  ['screenRole','screenSponsor','screenOrganizer','screenBrowse'].forEach(id=> {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.add('hidden');
+    }
+  }); 
+}
+function showScreen(id){
+  hideAllScreens();
+  document.getElementById(id).classList.remove('hidden');
+}
+
+// Initialize custom alert and confirm functions
+const showCustomAlert = (title, content) => {
+  let existingAlert = document.getElementById('customAlertModal');
+  if (existingAlert) { existingAlert.remove(); }
+
+  const modal = document.createElement('div');
+  modal.id = 'customAlertModal';
+  
+  const panel = document.createElement('div');
+  const titleEl = document.createElement('h3'); titleEl.innerText = title;
+  const contentEl = document.createElement('div'); contentEl.innerText = content;
+  const closeBtn = document.createElement('button'); closeBtn.innerText = 'Close';
+  closeBtn.onclick = () => modal.remove();
+  
+  panel.appendChild(titleEl);
+  panel.appendChild(contentEl);
+  panel.appendChild(closeBtn);
+  modal.appendChild(panel);
+  document.body.appendChild(modal);
+};
+
+const showCustomConfirm = (title, content, onConfirm) => {
+  let existingConfirm = document.getElementById('customConfirmModal');
+  if (existingConfirm) { existingConfirm.remove(); }
+
+  const modal = document.createElement('div');
+  modal.id = 'customConfirmModal';
+  
+  const panel = document.createElement('div');
+  const titleEl = document.createElement('h3'); titleEl.innerText = title;
+  const contentEl = document.createElement('div'); contentEl.innerHTML = content;
+  
+  const buttonRow = document.createElement('div');
+  buttonRow.className = 'button-row';
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.innerText = 'Cancel';
+  cancelBtn.className = 'ghost';
+  cancelBtn.style = "width: 50%;";
+  cancelBtn.onclick = () => modal.remove();
+  
+  const confirmBtn = document.createElement('button');
+  confirmBtn.innerText = 'Confirm';
+  confirmBtn.style = "width: 50%;";
+  confirmBtn.onclick = () => {
+    onConfirm();
+    modal.remove();
+  };
+  
+  buttonRow.appendChild(cancelBtn);
+  buttonRow.appendChild(confirmBtn);
+  panel.appendChild(titleEl);
+  panel.appendChild(contentEl);
+  panel.appendChild(buttonRow);
+  modal.appendChild(panel);
+  document.body.appendChild(modal);
+};
+
+showScreen('screenRole');
+
+document.getElementById('beSponsor').onclick = ()=>{
+  profile.role='Sponsor';
+  updateProfileUI();
+  showScreen('screenSponsor');
+};
+document.getElementById('beOrganizer').onclick = ()=>{
+  profile.role='Event';
+  updateProfileUI();
+  showScreen('screenOrganizer');
+};
+document.getElementById('backToHome').onclick = ()=> showScreen('screenRole');
+document.getElementById('backToHome2').onclick = ()=> showScreen('screenRole');
+document.getElementById('backToBrowse').onclick = () => {
+  showScreen('screenBrowse');
+  document.getElementById('browseGrid').classList.remove('hidden');
+  document.getElementById('screenAnalysis').classList.add('hidden');
+};
+
+/* -------------------------
+  In-memory data: events + sponsors + pitchbooks
+--------------------------*/
+let events = [
+  {id:1,name:"Tech Blitz 2026", institution:"IIT Sample", location:"Mumbai", type:"Tech", footfall:5200, last_sponsor:"BrandA", money:200000, tags:["tech","expo"], desc:"Large tech fest with demos & workshops."},
+  {id:2,name:"Cultura 2026", institution:"XYZ College", location:"Pune", type:"Cultural", footfall:3200, last_sponsor:"BrandB", money:120000, tags:["music","arts"], desc:"Multi-day cultural festival with concerts."},
+  {id:3,name:"Varsity Games", institution:"ABC Univ", location:"Mumbai", type:"Sports", footfall:7800, last_sponsor:"BrandC", money:250000, tags:["sports","competition"], desc:"Inter-college sports tournament."},
+  {id:4,name:"BizCon 2026", institution:"NM School", location:"Bengaluru", type:"Conference", footfall:900, last_sponsor:"BrandD", money:80000, tags:["conference","startups"], desc:"Business conference with panels & networking."}
+];
+
+// sponsors with example socials (instagram handle + linkedin url)
+let sponsors = [
+  {id:101,name:"BrandA",industry:"FMCG",objectives:["awareness","activation"],budgetRange:"₹1L-3L",contacts:["sponsorship@branda.com"],active:false, socials:{instagram:"@branda",linkedin:"https://linkedin.com/company/branda"}},
+  {id:102,name:"BrandB",industry:"Beverages",objectives:["activation","awareness"],budgetRange:"₹50k-2L",contacts:["events@brandb.com"],active:false, socials:{instagram:"@brandb",linkedin:"https://linkedin.com/company/brandb"}},
+  {id:103,name:"BrandC",industry:"Sportswear",objectives:["activation","leadgen"],budgetRange:"₹2L-6L",contacts:["sports@brandc.com"],active:false, socials:{instagram:"@brandc",linkedin:"https://linkedin.com/company/brandc"}},
+  {id:104,name:"BrandD",industry:"Fintech",objectives:["leadgen","awareness"],budgetRange:"₹50k-2L",contacts:["partnerships@brandd.com"],active:false, socials:{instagram:"@brandd",linkedin:"https://linkedin.com/company/brandd"}}
+];
+
+let sponsorIndustries = Array.from(new Set(sponsors.map(s=>s.industry))).sort();
+let pitchbook = null; // uploaded pitchbook (organizer side) in-memory
+
+/* -------------------------
+  Helper: add or update sponsor when a sponsor signs up
+--------------------------*/
+function registerSponsorFromIntent(brandName, industry, intentObj, budget){
+  if(!brandName || brandName.trim().length===0) return null;
+  brandName = brandName.trim();
+  const existing = sponsors.find(s => s.name.toLowerCase() === brandName.toLowerCase());
+  if(existing){
+    existing.active = true;
+    existing.objectives = Array.from(new Set([...(existing.objectives||[]), intentObj]));
+    existing.budgetRange = budget ? `₹${Math.round(budget/1000)}k+` : existing.budgetRange || '—';
+    if(industry && industry.trim()) existing.industry = industry.trim();
+    sponsorIndustries = Array.from(new Set(sponsors.map(s=>s.industry))).sort();
+    populateSponsorFilters();
+    renderSponsorsList();
+    return existing;
+  } else {
+    const nid = Math.floor(Date.now()/10) + Math.floor(Math.random()*100);
+    const newSponsor = {
+      id: nid,
+      name: brandName,
+      industry: industry && industry.trim() ? industry.trim() : 'General',
+      objectives: intentObj ? [intentObj] : [],
+      budgetRange: budget ? `₹${Math.round(budget/1000)}k+` : '—',
+      contacts: [],
+      active: true,
+      socials: { instagram: '', linkedin: '' }
+    };
+    sponsors.unshift(newSponsor);
+    sponsorIndustries = Array.from(new Set(sponsors.map(s=>s.industry))).sort();
+    populateSponsorFilters();
+    renderSponsorsList();
+    return newSponsor;
+  }
+}
+
+/* -------- Sponsors directory rendering -------- */
+function renderSponsorsList(filterIndustry=''){
+  const root = document.getElementById('sponsorsList');
+  root.innerHTML = '';
+  const list = sponsors.filter(s=>!filterIndustry || s.industry===filterIndustry);
+  if(list.length===0) {
+    root.innerHTML = '<div class="small muted">No sponsors match filters.</div>';
+    return;
+  }
+  list.forEach(s=>{
+    const el = document.createElement('div'); el.className='sponsor-row';
+    el.innerHTML = `
+      <div>
+        <div style="font-weight:600">${s.name} ${s.active?'<span class="active-badge">Active</span>':''}</div>
+        <div class="small muted">${s.industry} · ${s.budgetRange}</div>
+        <div class="small" style="margin-top:6px">Objectives: ${s.objectives.join(', ') || '—'}</div>
+      </div>
+      <div style="text-align:right; display: flex; flex-direction: column; gap: 6px;">
+        <button class="ghost viewSponsor" data-id="${s.id}" style="padding: 6px 10px; font-size: 14px;">View</button>
+        <button class="ghost pitchSponsor" data-id="${s.id}" style="padding: 6px 10px; font-size: 14px;">Pitch</button>
+      </div>
+    `;
+    root.appendChild(el);
+  });
+  
+  document.querySelectorAll('.viewSponsor').forEach(b=> b.onclick = e=>{
+    const id = Number(e.target.getAttribute('data-id'));
+    const s = sponsors.find(x=>x.id===id);
+    const content = `Industry: ${s.industry}\nBudget: ${s.budgetRange}\nObjectives: ${s.objectives.join(', ')}\nContacts: ${s.contacts.join(', ') || '—'}\nSocials: ${s.socials.instagram || '—'} / ${s.socials.linkedin || '—'}`;
+    showCustomAlert(s.name, content);
+  });
+
+  document.querySelectorAll('.pitchSponsor').forEach(b=> b.onclick = e=>{
+    const id = Number(e.target.getAttribute('data-id'));
+    pitchToSponsor(id);
+  });
+}
+
+/* populate industry filter options */
+function populateSponsorFilters(){
+  const sel = document.getElementById('sFilterIndustry');
+  sel.innerHTML = `<option value="">All industries</option>` + sponsorIndustries.map(i=>`<option value="${i}">${i}</option>`).join('');
+}
+populateSponsorFilters();
+renderSponsorsList();
+
+/* filter & refresh */
+document.getElementById('sFilterIndustry').onchange = (e)=> renderSponsorsList(e.target.value);
+document.getElementById('clearFilters').onclick = ()=>{
+  document.getElementById('sFilterIndustry').value='';
+  renderSponsorsList();
+};
+document.getElementById('refreshSponsors').onclick = ()=> renderSponsorsList(document.getElementById('sFilterIndustry').value);
+
+/* ----------------------------------
+  Pitchbook upload handling (organizer)
+-----------------------------------*/
+const fileInput = document.getElementById('pitchbookFile');
+const pitchInfo = document.getElementById('pitchInfo');
+fileInput.onchange = (e)=>{
+  const f = e.target.files[0];
+  if(!f) {
+    pitchbook = null;
+    pitchInfo.innerText = 'No pitchbook uploaded.';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (ev)=> {
+    const dataUrl = ev.target.result;
+    pitchbook = {name:f.name, size:f.size, url:dataUrl, blob: f};
+    pitchInfo.innerHTML = `Uploaded: <strong>${f.name}</strong> (${Math.round(f.size/1024)} KB)`;
+  };
+  reader.readAsDataURL(f);
+};
+
+/* publish event */
+document.getElementById('publishAndStay').onclick = ()=> publishEvent(false);
+document.getElementById('publishAndBack').onclick = ()=> publishEvent(true);
+function publishEvent(goBack){
+  const ev = {
+    id: Date.now(),
+    name: document.getElementById('o_name').value || 'Untitled Event',
+    institution: document.getElementById('o_inst').value || 'Unknown',
+    location: document.getElementById('o_loc').value || 'Unknown',
+    type: document.getElementById('o_type').value || 'General',
+    desc: document.getElementById('o_desc').value || '',
+    tags: (document.getElementById('o_tags').value || '').split(',').map(t => t.trim()).filter(t => t),
+    footfall: Number(document.getElementById('o_foot').value || 0),
+    last_sponsor: '',
+    money: Number(document.getElementById('o_money').value || 0),
+  };
+  events.unshift(ev);
+  document.getElementById('oMsg').innerText = 'Event published — visible to sponsors.';
+  if(goBack) setTimeout(()=> {
+    document.getElementById('oMsg').innerText='';
+    showScreen('screenRole');
+  }, 900);
+}
+
+/* -------------------------
+  Sponsor browsing + AI sim
+--------------------------*/
+let sponsorIntent = {budget:100000, objective:'awareness', location:''};
+let selectedIds = new Set();
+
+function computeFit(ev,intent){
+  const tags=(ev.tags||[]).join(' ').toLowerCase();
+  const type=(ev.type||'').toLowerCase();
+  const obj=(intent.objective||'').toLowerCase();
+  let score=0.35;
+  if(obj==='awareness') score+=Math.min(0.45,ev.footfall/10000);
+  if(obj==='activation') score+=(tags.includes('food')||tags.includes('product')||type.includes('sports')?0.4:0.18);
+  if(obj==='leadgen') score+=(type.includes('conference')||tags.includes('expo')?0.5:0.18);
+  if(intent.location && ev.location.toLowerCase().includes(intent.location.toLowerCase())) score+=0.1;
+  return Math.min(1,score);
+}
+
+// New function to apply filters
+function applyFiltersAndRepopulate() {
+  const filters = {
+    type: document.querySelector('input[name="filter_type"]:checked').value,
+    location: document.getElementById('filterLocation').value.trim(),
+    budget: document.querySelector('input[name="filter_budget"]:checked').value
+  };
+  populateEventsForSponsor(filters);
+}
+
+function populateEventsForSponsor(filters = {}){
+  const container = document.getElementById('eventsContainer');
+  container.innerHTML='';
+
+  // Also clear the new detailed analysis container
+  document.getElementById('detailedAnalysisContainer').innerHTML = '';
+
+  // Apply filters
+  let filteredEvents = events.filter(ev => {
+    if (filters.type && ev.type !== filters.type) {
+      return false;
+    }
+    if (filters.location && !ev.location.toLowerCase().includes(filters.location.toLowerCase())) {
+      return false;
+    }
+    if (filters.budget) {
+      if (filters.budget === "100000" && ev.money >= 100000) return false;
+      if (filters.budget === "200000" && ev.money >= 200000) return false;
+      if (filters.budget === "500000" && ev.money <= 200000) return false;
+    }
+    return true;
+  });
+
+  const enriched = filteredEvents
+    .map(ev=>({...ev,quickScore:Math.round((ev.footfall/10000 + computeFit(ev,sponsorIntent))*50)}))
+    .sort((a,b)=>b.quickScore-a.quickScore);
+  
+  if (enriched.length === 0) {
+    container.innerHTML = '<div class="card" style="text-align: center; padding: 20px;"><span class="muted">No events found.</span></div>';
+    return;
+  }
+  
+  enriched.forEach(ev=>{
+    const d = document.createElement('div'); 
+    d.className='event-card-new';
+    
+    let tagsHtml = (ev.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
+    if (tagsHtml === '') {
+      tagsHtml = `<span class="tag">${ev.type}</span>`;
+    }
+    
+    d.innerHTML = `
+      <div class="event-card-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+        </svg>
+      </div>
+      <div class="event-card-info">
+        
+        <div class="event-card-header">
+          <div class="event-card-header-left">
+            <h3>${ev.name}</h3>
+            <div class="event-card-meta">
+              ${ev.institution} · ${ev.location}
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card-tags">
+          ${tagsHtml}
+        </div>
+        
+        <div class="event-card-footer">
+          <div class="event-card-stats">
+            <div class="stat-item">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372m-1.74-4.473a9.38 9.38 0 0 0 3.64-1.74m-3.64 1.74a9.384 9.384 0 0 1-1.74-3.64m1.74 3.64c-.364 1.74-1.996 3.25-3.64 3.64m-1.74-3.64a9.384 9.384 0 0 1-3.64-1.74m3.64 1.74c-1.74.364-3.25 1.996-3.64 3.64m-1.74-3.64a9.38 9.38 0 0 1-1.74-3.64m1.74 3.64c-.364-1.74-1.996-3.25-3.64-3.64m1.74 3.64a9.38 9.38 0 0 1-3.64 1.74m-1.74-3.64a9.38 9.38 0 0 1-1.74-3.64m9.38-9.38a9.38 9.38 0 0 1 3.64 1.74m-3.64-1.74a9.38 9.38 0 0 1 1.74 3.64m-1.74-3.64c.364-1.74 1.996-3.25 3.64-3.64m1.74 3.64a9.38 9.38 0 0 0 1.74 3.64m-1.74-3.64c1.74-.364 3.25-1.996 3.64-3.64M3.75 12a9.375 9.375 0 0 1 9.375-9.375m0 0c1.74 0 3.375.364 4.875 1.036M13.125 2.625c1.5 1.12 2.57 2.8 2.875 4.75M3.75 12c0 1.74.364 3.375 1.036 4.875m-1.036-4.875c1.12 1.5 2.8 2.57 4.75 2.875M9 15a6 6 0 1 1 12 0v6H9v-6Z" />
+              </svg>
+              <strong>${ev.footfall.toLocaleString()}</strong>
+            </div>
+            <div class="stat-item">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.75A.75.75 0 0 1 3 4.5h.75m0 0H21m-18 0h18M3 6h18M3 6v10.5A2.25 2.25 0 0 0 5.25 18.75h13.5A2.25 2.25 0 0 0 21 16.5V6M3 6h.75m16.5 0h.75m0 0v.75a.75.75 0 0 1-.75.75h-.75m0 0h.75a.75.75 0 0 1 .75-.75v-.75m0 0h-.75a.75.75 0 0 1-.75.75v.75m-16.5 0h.75a.75.75 0 0 1 .75-.75v-.75m0 0h-.75a.75.75 0 0 1-.75.75v.75M6 13.5h3M6 13.5v3m6-3h3m-3 0v3" />
+              </svg>
+              <strong>₹${(ev.money/1000).toFixed(0)}k</strong>
+            </div>
+            <div class="stat-item">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-3v3m3-3v3m3-3v3m-9.75 3.75h9.75M14.25 3v2.25m3-3v3m-3-3v3m-9.75 3.75h9.75M3.75 7.5h16.5M3.75 12h16.5m-16.5 4.5h16.5M3.75 4.5h16.5v15H3.75v-15Z" />
+              </svg>
+              <strong>${ev.quickScore}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="event-card-actions-stacked">
+        <div class="event-card-actions-inline" style="width: 100%; justify-content: flex-end;">
+          <label>
+            <input type="checkbox" data-id="${ev.id}" class="selectEv" ${selectedIds.has(ev.id)?'checked':''}/> Select
+          </label>
+        </div>
+        <button class="ghost analyzeSingle" data-id="${ev.id}">✨ Analyze</button>
+        <button class="ghost negotiateBtn" data-id="${ev.id}">Negotiate</button>
+      </div>
+    `;
+  
+    container.appendChild(d);
+  });
+
+  document.querySelectorAll('.selectEv').forEach(ch=> ch.onchange = e=>{
+    const id = Number(e.target.getAttribute('data-id'));
+    if(e.target.checked) selectedIds.add(id); else selectedIds.delete(id);
+    document.getElementById('selCount').innerText = selectedIds.size + ' selected';
+  });
+  document.querySelectorAll('.analyzeSingle').forEach(b=> b.onclick = e => runAIAnalysis([Number(b.getAttribute('data-id'))]));
+  document.querySelectorAll('.negotiateBtn').forEach(b=> b.onclick = e => openChat(Number(b.getAttribute('data-id'))));
+}
+
+document.getElementById('toBrowse').onclick = ()=>{
+  const brand = (document.getElementById('sBrand').value || '').trim();
+  if(!brand){
+    document.getElementById('sMsg').innerText = 'Please enter your brand name to continue.';
+    return;
+  }
+  document.getElementById('sMsg').innerText = '';
+  const industry = (document.getElementById('sIndustry').value || '').trim();
+  sponsorIntent.budget = Number(document.getElementById('sBudget').value || 0);
+  sponsorIntent.objective = document.getElementById('sObjective').value;
+  sponsorIntent.location = document.getElementById('sLocation').value || '';
+
+  const reg = registerSponsorFromIntent(brand, industry, sponsorIntent.objective, sponsorIntent.budget);
+  if(reg){
+    document.getElementById('sMsg').innerText = `Registered as active sponsor: ${reg.name}`;
+    setTimeout(()=> { document.getElementById('sMsg').innerText = ''; }, 1800);
+  }
+
+  populateEventsForSponsor();
+  showScreen('screenBrowse');
+  document.getElementById('browseGrid').classList.remove('hidden');
+  document.getElementById('screenAnalysis').classList.add('hidden');
+  
+  document.querySelectorAll('input[name="filter_type"]').forEach(radio => {
+    radio.onchange = applyFiltersAndRepopulate;
+  });
+  document.querySelectorAll('input[name="filter_budget"]').forEach(radio => {
+    radio.onchange = applyFiltersAndRepopulate;
+  });
+  document.getElementById('filterLocation').oninput = applyFiltersAndRepopulate;
+};
+
+document.getElementById('startOver').onclick = ()=> showScreen('screenRole');
+document.getElementById('clearSelection').onclick = ()=> { 
+  selectedIds.clear(); 
+  
+  document.querySelector('input[name="filter_type"][value=""]').checked = true;
+  document.querySelector('input[name="filter_budget"][value=""]').checked = true;
+  document.getElementById('filterLocation').value = '';
+  
+  applyFiltersAndRepopulate();
+  
+  document.getElementById('selCount').innerText='0 selected'; 
+};
+
+document.getElementById('analyzeBtn').onclick = async ()=> {
+  if(selectedIds.size < 1){
+    showCustomAlert('No events selected', 'Please select at least one event to analyze.');
+    return;
+  }
+  await runAIAnalysis(Array.from(selectedIds).slice(0,3));
+};
+
+async function runAIAnalysis(eventIds){
+  const evs = events.filter(e=>eventIds.includes(e.id));
+  showLoadingSpinner();
+  const analysisResults = await Promise.all(evs.map(ev => runRealAIAnalysis(ev, sponsorIntent)));
+  const validResults = analysisResults.filter(r => r);
+  
+  if (validResults.length === 0) {
+    hideLoadingSpinner();
+    showCustomAlert('AI Error', 'The AI was unable to analyze these events. Please try again.');
+    return;
+  }
+  
+  await renderAIResultsDashboard(validResults); 
+  
+  hideLoadingSpinner();
+  showScreen('screenBrowse');
+  document.getElementById('browseGrid').classList.add('hidden');
+  document.getElementById('screenAnalysis').classList.remove('hidden');
+}
+
+/**
+ * New: Runs a real AI analysis on a single event
+ */
+async function runRealAIAnalysis(ev, intent) {
+  const schema = {
+    type: "OBJECT",
+    properties: {
+      "overallScore": { "type": "INTEGER", "description": "An overall score from 0-100." },
+      "executiveSummary": { "type": "STRING", "description": "A 2-3 sentence executive summary of the analysis, highlighting the main reason to sponsor or not." },
+      "points": {
+        "type": "ARRAY",
+        "items": {
+          "type": "OBJECT",
+          "properties": {
+            "title": { "type": "STRING", "description": "The title of the analysis point (e.g., 'Fit (Category)', 'Reach & Audience')." },
+            "score": { "type": "INTEGER", "description": "A score for this specific point (0-100)." },
+            "text": { "type": "STRING", "description": "A 1-2 sentence concise analysis for this point." }
+          },
+          "required": ["title", "score", "text"]
+        },
+        "description": "An array of exactly 6 analysis points."
+      }
+    },
+    required: ["overallScore", "executiveSummary", "points"]
+  };
+  
+  const systemPrompt = `You are an expert sponsorship analyst. Your task is to analyze an event for a potential sponsor. 
+  Provide a JSON object matching the requested schema. 
+  Provide a 2-3 sentence executive summary of the analysis.
+  The analysis must contain exactly 6 points: 
+  1. Fit (Category), 2. Reach & Audience, 3. Cost Efficiency, 4. Activation Potential, 5. Competitive / Risk, 6. Actionable Recommendation.
+  Be concise and insightful. *Only* return the JSON object.`;
+  
+  const userPrompt = `Analyze the following event:
+- Event: ${ev.name} at ${ev.institution}, ${ev.location}
+- Type: ${ev.type}
+- Tags: ${(ev.tags || []).join(', ')}
+- Description: ${ev.desc}
+- Last Year Footfall: ${ev.footfall}
+- Fundraising Target: ₹${ev.money}
+
+For this sponsor:
+- Sponsor's Industry: ${intent.industry || 'Not specified'}
+- Sponsor's Objective: ${intent.objective}
+- Sponsor's Budget: ₹${intent.budget}`;
+
+  let response = null;
+  try {
+    response = await callGeminiAPI(userPrompt, systemPrompt, schema);
+    if (!response) return null;
+    const analysis = JSON.parse(response);
+    return {
+      ...analysis,
+      eventId: ev.id,
+      name: ev.name,
+      institution: ev.institution,
+      location: ev.location,
+      money: ev.money
+    };
+    
+  } catch (e) {
+    console.error("Failed to parse AI analysis response:", e, response);
+    return null;
+  }
+}
+
+/**
+ * New: Renders the analysis as a dashboard on the new page
+ */
+async function renderAIResultsDashboard(items) {
+  const detailedRoot = document.getElementById('detailedAnalysisContainer');
+  detailedRoot.innerHTML = '';
+
+  let html = '';
+
+  const sorted = items.slice().sort((a,b)=>b.overallScore-a.overallScore);
+  const topTwo = sorted.slice(0,2);
+  
+  if(topTwo.length){
+    html += `<h4 style="font-size: 18px; color: var(--royal); margin-bottom: 16px;">✨ Top 2 Recommendations</h4>`;
+    const topHtml = topTwo.map(t=>`
+      <div class="featured-card" style="border-left: 4px solid var(--accent-green);">
+        <div class="featured-card-icon" style="background: var(--accent-green-tint); color: var(--accent-green);">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+        </div>
+        <div class="featured-card-info">
+          <h5 style="font-size: 15px;">${t.name} (Score: ${t.overallScore})</h5>
+          <p style="font-size: 13px;">${t.points[5]?.text || 'No recommendation provided.'}</p>
+        </div>
+      </div>
+    `).join('');
+    html += `<div style="display:flex; flex-direction: column; gap:8px; margin-bottom: 24px;">${topHtml}</div>
+            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 24px 0;">`;
+  }
+
+  html += `<h4 style="font-size: 18px; color: var(--black); margin-bottom: 16px;">Side-by-Side Comparison</h4>`;
+
+  const dashboard = document.createElement('div');
+  dashboard.className = 'dashboard-table';
+  dashboard.style.gridTemplateColumns = `200px repeat(${items.length}, 1fr)`;
+  
+  let dashboardHTML = `<div class="dashboard-cell factor header"><strong>Metric</strong></div>`;
+  items.forEach(it => {
+    dashboardHTML += `<div class="dashboard-cell header">
+      <h3>${it.name}</h3>
+      <div class="muted small">${it.institution} · ₹${it.money}</div>
+    </div>`;
+  });
+  
+  dashboardHTML += `<div class="dashboard-cell factor">Overall Score</div>`;
+  items.forEach(it => {
+    dashboardHTML += `<div class="dashboard-cell">
+      <span class="dashboard-score">${it.overallScore}</span>
+      <span class="dashboard-text">${it.executiveSummary}</span>
+    </div>`;
+  });
+  
+  const factorTitles = [
+    "Fit (Category)", "Reach & Audience", "Cost Efficiency", 
+    "Activation Potential", "Competitive / Risk", "Actionable Recommendation"
+  ];
+  
+  factorTitles.forEach(title => {
+    dashboardHTML += `<div class="dashboard-cell factor">${title}</div>`;
+    items.forEach(it => {
+      const point = it.points.find(p => p.title.startsWith(title.split(' ')[0]));
+      if (point) {
+        dashboardHTML += `<div class="dashboard-cell">
+          <span class="dashboard-score">${point.score}</span>
+          <div class="ai-point-scale" style="margin-top: 0; margin-bottom: 8px;">
+            <div class="ai-point-bar" style="width: ${point.score}%;"></div>
+          </div>
+          <span class="dashboard-text">${point.text}</span>
+        </div>`;
+      } else {
+        dashboardHTML += `<div class="dashboard-cell"><span class="dashboard-text muted">N/A</span></div>`;
+      }
+    });
+  });
+
+  dashboardHTML += `<div class="dashboard-cell factor">Actions</div>`;
+  items.forEach(it => {
+    dashboardHTML += `<div class="dashboard-cell dashboard-actions">
+      <button class="ghost" onclick="openChat(${it.eventId})">Negotiate</button>
+      <button class="ghost" onclick="openSocialPicker(${it.eventId})">✨ Pitch on Socials</button>
+    </div>`;
+  });
+
+  dashboard.innerHTML = dashboardHTML;
+  
+  detailedRoot.innerHTML = html;
+  detailedRoot.appendChild(dashboard);
+  detailedRoot.scrollIntoView({behavior:'smooth'});
+}
+
+/* -------------------------
+  Social outreach (modal + simulated GenAI drafts)
+--------------------------*/
+const socialModal = document.getElementById('socialModal');
+const socialSponsorsRoot = document.getElementById('socialSponsors');
+const socialDraftsRoot = document.getElementById('socialDrafts');
+
+document.getElementById('closeSocial').onclick = ()=>{
+  socialModal.style.display='none';
+  socialDraftsRoot.innerHTML='';
+};
+
+/** open picker for a given event (eventId) */
+function openSocialPicker(eventId){
+  socialSponsorsRoot.innerHTML = '';
+  sponsors.forEach(s=>{
+    const card = document.createElement('div'); card.className='social-card';
+    card.innerHTML = `
+      <div>
+        <div style="font-weight:600">${s.name} ${s.active?'<span class="active-badge">Active</span>':''}</div>
+        <div class="social-field">${s.industry} · ${s.budgetRange}</div>
+        <div class="social-field" style="margin-top:6px">IG: ${s.socials.instagram || '—'} · LI: ${s.socials.linkedin || '—'}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="ghost" data-sid="${s.id}" onclick="selectBrandForSocial(${eventId}, ${s.id})" style="padding: 6px 10px; font-size: 14px;">Draft message</button>
+      </div>
+    `;
+    socialSponsorsRoot.appendChild(card);
+  });
+  socialDraftsRoot.innerHTML = '<div class="small muted" style="margin-top:8px">Choose a brand to draft Instagram + LinkedIn messages.</div>';
+  socialModal.style.display='flex';
+}
+
+/** when a brand is selected, generate message drafts */
+async function selectBrandForSocial(eventId, sponsorId){
+  const ev = events.find(e=>e.id===eventId);
+  const s = sponsors.find(x=>x.id===sponsorId);
+  if(!ev || !s) return showCustomAlert('Error', 'Missing event or sponsor data.');
+
+  socialDraftsRoot.innerHTML = `
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 0;">
+      <div class="spinner" style="width: 32px; height: 32px; border-width: 4px;"></div>
+      <div class="muted small">Generating AI-powered drafts...</div>
+    </div>`;
+
+  const systemPrompt = "You are an expert event organizer writing outreach messages to potential sponsors. Be concise, professional, and friendly. Always include the event name and footfall. Tailor the message to the platform (short & casual for Instagram, professional for LinkedIn).";
+  
+  const igPrompt = `Write an Instagram DM to the ${s.name} team. Our event is ${ev.name} at ${ev.institution} (${ev.location}) with ~${ev.footfall} footfall. Their brand is in the ${s.industry} industry and wants ${s.objectives.join(' & ')}. Keep it very short.`;
+  
+  const liPrompt = `Write a professional LinkedIn message to the ${s.name} sponsorship team. Our event is ${ev.name} at ${ev.institution} (${ev.location}) with an expected footfall of ~${ev.footfall}. Their brand is in the ${s.industry} industry and their stated objectives are ${s.objectives.join(' & ')}. Ask for a brief call.`;
+
+  const [igDM, liMsg] = await Promise.all([
+    callGeminiAPI(igPrompt, systemPrompt),
+    callGeminiAPI(liPrompt, systemPrompt)
+  ]);
+  
+  if (!igDM || !liMsg) {
+    socialDraftsRoot.innerHTML = `<p class="muted">Error: Could not generate AI drafts. Please try again.</p>`;
+    return;
+  }
+
+  socialDraftsRoot.innerHTML = `
+    <div style="margin-top:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><strong>Drafts for ${s.name}</strong><div class="muted">${s.socials.instagram || 'IG handle not set'} · ${s.socials.linkedin || 'LinkedIn not set'}</div></div>
+      </div>
+
+      <div style="margin-top:12px">
+        <div style="font-weight:700">Instagram DM (short)</div>
+        <div style="margin-top:6px;padding:12px;border-radius:8px;border:1px solid #eef4ff;background:#fbfdff; line-height: 1.5;">${escapeHtml(igDM)}</div>
+        <div style="margin-top:8px"><button class="copy-btn copy-ig">Copy IG DM</button></div>
+      </div>
+
+      <div style="margin-top:16px">
+        <div style="font-weight:700">LinkedIn message (professional)</div>
+        <div style="margin-top:6px;padding:12px;border-radius:8px;border:1px solid #eef4ff;background:#fbfdff; line-height: 1.5;">${escapeHtml(liMsg)}</div>
+        <div style="margin-top:8px"><button class="copy-btn copy-li">Copy LinkedIn</button></div>
+      </div>
+    </div>
+  `;
+
+  const igBtn = socialDraftsRoot.querySelector('.copy-ig');
+  const liBtn = socialDraftsRoot.querySelector('.copy-li');
+  if (igBtn) igBtn.onclick = () => copyToClipboard(igDM, igBtn);
+  if (liBtn) liBtn.onclick = () => copyToClipboard(liMsg, liBtn);
+}
+
+/** copy helper */
+function copyToClipboard(text, buttonEl){
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = buttonEl.innerText;
+      buttonEl.innerText = 'Copied!';
+      setTimeout(() => {
+        buttonEl.innerText = originalText;
+      }, 1500);
+    }).catch(err => {
+      console.warn('Async clipboard write failed:', err);
+      copyFallback(text, buttonEl);
+    });
+  } else {
+    copyFallback(text, buttonEl);
+  }
+}
+
+function copyFallback(text, buttonEl) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'absolute';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    const originalText = buttonEl.innerText;
+    buttonEl.innerText = 'Copied!';
+    setTimeout(() => {
+      buttonEl.innerText = originalText;
+    }, 1500);
+  } catch (e) {
+    console.error('Fallback copy failed:', e);
+    showCustomAlert('Copy Failed', 'Could not copy to clipboard. Please copy manually.');
+  }
+  ta.remove();
+}
+
+/** small HTML escape */
+function escapeHtml(s){
+  if(!s) return '';
+  return s.replace(/&/g,'&amp;')
+          .replace(/</g,'&lt;')
+          .replace(/>/g,'&gt;')
+          .replace(/\n/g,'<br/>');
+}
+
+/* -------------------------
+  Chat & pitching flows
+--------------------------*/
+const chatModal = document.getElementById('chatModal');
+const messagesEl = document.getElementById('messages');
+let currentEvent = null;
+let currentSponsor = null;
+const negBtn = document.getElementById('generateNegotiationPoints');
+
+function openChat(eventId, sponsorId){
+  if(sponsorId){
+    currentSponsor = sponsors.find(s=>s.id===sponsorId);
+    currentEvent = events.find(e=>e.id===eventId);
+    document.getElementById('chatTitle').innerText = `Pitch to ${currentSponsor.name}`;
+    document.getElementById('chatSub').innerText = `${currentEvent.name} · ${currentEvent.location} · ₹${currentEvent.money.toLocaleString()}`;
+    messagesEl.innerHTML = `<div class="msg" style="justify-content: center;"><span class="small muted">System: Pitch created for ${currentSponsor.name}.</span></div>`;
+    if(pitchbook && pitchbook.url){
+      const link = document.createElement('a');
+      link.href = pitchbook.url;
+      link.download = pitchbook.name;
+      link.innerText = `Download pitchbook: ${pitchbook.name}`;
+      link.style = "display:inline-block; padding: 8px 12px; background: #fafcff; border-radius: 6px; border: 1px solid var(--border-color); text-decoration: none; color: var(--royal); font-weight: 500;";
+      const m = document.createElement('div'); m.className='msg'; m.innerHTML = `<div class="bubble other">Organizer shared a pitchbook: </div>`;
+      messagesEl.appendChild(m); 
+      const linkMsg = document.createElement('div'); linkMsg.className='msg'; linkMsg.appendChild(link);
+      messagesEl.appendChild(linkMsg);
+    }
+    negBtn.style.display = 'block';
+    chatModal.style.display='flex';
+    return;
+  }
+
+  currentEvent = events.find(e=>e.id===eventId);
+  currentSponsor = null;
+  if(!currentEvent) return;
+  document.getElementById('chatTitle').innerText = `Chat — ${currentEvent.name}`;
+  document.getElementById('chatSub').innerText = `${currentEvent.institution} · ${currentEvent.location} · ₹${currentEvent.money.toLocaleString()}`;
+  messagesEl.innerHTML = `<div class="msg" style="justify-content: center;"><span class="small muted">System: Chat opened with ${currentEvent.institution}.</span></div>`;
+  negBtn.style.display = 'none';
+  chatModal.style.display='flex';
+}
+document.getElementById('closeChat').onclick = ()=>{ 
+  chatModal.style.display='none'; 
+  currentEvent=null; 
+  currentSponsor=null; 
+  negBtn.style.display = 'none';
+};
+document.getElementById('sendChat').onclick = ()=>{
+  const txt = (document.getElementById('chatInput').value||'').trim();
+  if(!txt) return;
+  const you = document.createElement('div');
+  you.className='msg you';
+  you.innerHTML = `<div class="bubble you">${escapeHtml(txt).replace(/<br\/>/g, '\n')}</div>`;
+  messagesEl.appendChild(you);
+  document.getElementById('chatInput').value='';
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  setTimeout(()=>{
+    const reply = document.createElement('div'); reply.className='msg';
+    if(currentSponsor){
+      reply.innerHTML = `<div class="bubble other">${currentSponsor.name}: Thanks for pitching. We'll review the pitchbook and share a contact.</div>`;
+    } else if (currentEvent){
+      reply.innerHTML = `<div class="bubble other">${currentEvent.institution}: Thanks for reaching out. Please share your proposal and contact details.</div>`;
+    } else {
+      reply.innerHTML = `<div class="bubble other">System: Message received.</div>`;
+    }
+    messagesEl.appendChild(reply); messagesEl.scrollTop = messagesEl.scrollHeight;
+  },700);
+};
+
+// Helper function to add a system message to chat
+function addSystemMessageToChat(text) {
+  const msg = document.createElement('div');
+  msg.className = 'msg';
+
+  let safe = escapeHtml(text);
+  safe = safe
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\* /g, '• ')
+    .replace(/\n/g, '<br>');
+
+  msg.innerHTML = `<div class="bubble other" style="background: var(--accent-green-tint); border: 1px solid var(--accent-green);">
+    <strong style="color: #065f46;">✨ AI Negotiation Coach:</strong><br>
+    ${safe}
+  </div>`;
+  messagesEl.appendChild(msg);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function pitchToSponsor(sponsorId){
+  if(events.length===0){
+    showCustomAlert('No Events', 'No events published — please publish an event first.');
+    return;
+  }
+  
+  const sponsor = sponsors.find(s => s.id === sponsorId);
+  const pick = prompt(`Which event ID to pitch to ${sponsor.name}?\n\n${events.slice(0, 6).map(e=>`${e.id}: ${e.name} (${e.location})`).join('\n')}\n\nEnter ID:`);
+  
+  const eventId = Number(pick);
+  if(!eventId || !events.find(e=>e.id===eventId)){ 
+    if(pick !== null) {
+      showCustomAlert('Invalid ID', 'Invalid event id.'); 
+    }
+    return; 
+  }
+  openChat(eventId, sponsorId);
+}
+
+/* ---------- Gemini Helper Functions ---------- */
+const loadingSpinner = document.getElementById('loadingSpinner');
+function showLoadingSpinner() {
+  loadingSpinner.style.display = 'flex';
+}
+function hideLoadingSpinner() {
+  loadingSpinner.style.display = 'none';
+}
+
+async function callGeminiAPI(prompt, systemPrompt = "", jsonSchema = null) {
+  const apiKey = "AIzaSyCf-gqQWJ2FG0cPlclegRbSr6Gz5x8pTB0";
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+  const payload = {
+    contents: [{ parts: [{ text: prompt }] }],
+  };
+
+  if (systemPrompt) {
+    payload.systemInstruction = {
+      parts: [{ text: systemPrompt }]
+    };
+  }
+  
+  if (jsonSchema) {
+    payload.generationConfig = {
+      responseMimeType: "application/json",
+      responseSchema: jsonSchema
+    };
+  }
+
+  let retries = 3;
+  let delay = 1000;
+
+  while (retries > 0) {
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const candidate = result.candidates?.[0];
+
+      if (candidate && candidate.content?.parts?.[0]?.text) {
+        return candidate.content.parts[0].text;
+      } else {
+        console.error('Invalid response structure from API:', result);
+        return null;
+      }
+    } catch (error) {
+      console.warn(`API call failed, retrying in ${delay}ms...`, error);
+      retries--;
+      if (retries === 0) {
+        console.error('Gemini API call failed after all retries:', error);
+        showCustomAlert('AI Error', 'The AI feature failed to respond after several attempts. Please try again later.');
+        return null;
+      }
+      await new Promise(res => setTimeout(res, delay));
+      delay *= 2;
+    }
+  }
+  return null;
+}
+
+/* ---------- New Feature Listeners ---------- */
+
+/**
+ * Feature: Generate Event Description & Tags
+ */
+document.getElementById('generateEventDetails').onclick = async () => {
+  const eventData = {
+    name: document.getElementById('o_name').value,
+    institution: document.getElementById('o_inst').value,
+    location: document.getElementById('o_loc').value,
+    type: document.getElementById('o_type').value,
+    footfall: document.getElementById('o_foot').value,
+    money: document.getElementById('o_money').value,
+  };
+
+  if (!eventData.name || !eventData.type) {
+    showCustomAlert('Missing Info', 'Please fill in at least the Event Name and Type before generating.');
+    return;
+  }
+  
+  showLoadingSpinner();
+  
+  const systemPrompt = "You are an expert event marketer. Your task is to generate a compelling event description and relevant tags. Respond *only* in the following format, with no other text: \nDESCRIPTION: [Your generated description here]\nTAGS: [tag1, tag2, tag3, tag4, tag5]";
+  const prompt = `Generate a 1-paragraph event description and 5 comma-separated tags for the following event:
+- Name: ${eventData.name}
+- Institution: ${eventData.institution}
+- Location: ${eventData.location}
+- Type: ${eventData.type}
+- Expected Footfall: ${eventData.footfall || 'N/A'}
+- Fundraising Goal: ₹${eventData.money || 'N/A'}`;
+
+  const response = await callGeminiAPI(prompt, systemPrompt);
+  hideLoadingSpinner();
+
+  if (response) {
+    try {
+      const descMatch = response.match(/DESCRIPTION: ([\s\S]*?)\nTAGS:/);
+      const tagsMatch = response.match(/TAGS: (.*)/);
+      
+      const description = descMatch ? descMatch[1].trim() : "Could not parse description.";
+      const tags = tagsMatch ? tagsMatch[1].trim() : "";
+      
+      document.getElementById('o_desc').value = description;
+      document.getElementById('o_tags').value = tags;
+    } catch (e) {
+      console.error('Error parsing Gemini response:', e, response);
+      showCustomAlert('AI Error', 'The AI generated a response, but it was in an unexpected format. Please try again.');
+    }
+  }
+};
+
+/**
+ * New Feature: AI Suggest Sponsors
+ */
+document.getElementById('aiSuggestSponsors').onclick = async () => {
+  if (events.length === 0) {
+    showCustomAlert('No Event Found', 'You must publish an event before you can get AI suggestions.');
+    return;
+  }
+
+  const myEvent = events[0];
+  const suggestionsContainer = document.getElementById('aiSponsorSuggestions');
+  suggestionsContainer.innerHTML = `<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 0;">
+      <div class="spinner" style="width: 32px; height: 32px; border-width: 4px;"></div>
+      <div class="muted small">Asking AI to find your top 3 matches...</div>
+    </div>`;
+
+  const schema = {
+    type: "ARRAY",
+    items: {
+      type: "OBJECT",
+      properties: {
+        "name": { "type": "STRING", "description": "The exact name of the sponsor." },
+        "reason": { "type": "STRING", "description": "A 1-sentence reason why this sponsor is a good fit." }
+      },
+      required: ["name", "reason"]
+    },
+    description: "An array of the top 3 sponsor suggestions."
+  };
+
+  const systemPrompt = "You are an expert sponsorship matching AI. You will be given an event and a list of potential sponsors. Your job is to select the top 3 best-fit sponsors from the list and provide a 1-sentence reason for each. Respond *only* in the requested JSON format.";
+  
+  const userPrompt = `My event is:
+${JSON.stringify(myEvent, null, 2)}
+
+Here is the list of all available sponsors:
+${JSON.stringify(sponsors, null, 2)}
+
+Select the top 3 sponsors to pitch and provide a 1-sentence reason for each, based on their industry and objectives.`;
+
+  const response = await callGeminiAPI(userPrompt, systemPrompt, schema);
+
+  if (response) {
+    try {
+      const suggestions = JSON.parse(response);
+      let html = '<h5 style="margin-top: 0; margin-bottom: 10px; color: var(--royal);">✨ AI Top Suggestions</h5>';
+      
+      suggestions.forEach(sug => {
+        html += `
+          <div class="featured-card" style="gap: 12px; padding: 12px; margin-bottom: 8px;">
+            <div class="featured-card-icon" style="width: 36px; height: 36px; background: var(--accent-green-tint); color: var(--accent-green);">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+            </div>
+            <div class="featured-card-info">
+              <h5 style="font-size: 14px; margin-bottom: 2px;">${sug.name}</h5>
+              <p style="font-size: 12px;">${sug.reason}</p>
+            </div>
+          </div>
+        `;
+      });
+      suggestionsContainer.innerHTML = html;
+      
+    } catch (e) {
+      console.error('Error parsing AI sponsor suggestions:', e, response);
+      suggestionsContainer.innerHTML = `<p class="small muted">AI failed to parse suggestions. Please try again.</p>`;
+    }
+  } else {
+    suggestionsContainer.innerHTML = `<p class="small muted">AI could not generate suggestions. Please try again.</p>`;
+  }
+};
+
+/**
+ * New Feature: Generate Negotiation Points
+ */
+document.getElementById('generateNegotiationPoints').onclick = async () => {
+  if (!currentEvent || !currentSponsor) {
+    showCustomAlert('Error', 'No event or sponsor selected for this chat.');
+    return;
+  }
+  
+  showLoadingSpinner();
+  
+  const systemPrompt = "You are an expert negotiation coach. Your task is to give an event organizer 3-4 concise bullet points for their pitch to a specific sponsor. Focus on the 'Why You?' aspect.";
+  const prompt = `Give me 3-4 concise bullet points (as a single string with newlines) for pitching my event to this sponsor.
+- My Event: ${currentEvent.name} (${currentEvent.type})
+- Event Description: ${currentEvent.desc}
+- Event Footfall: ${currentEvent.footfall}
+- Event Target: ₹${currentEvent.money}
+
+- The Sponsor: ${currentSponsor.name}
+- Sponsor Industry: ${currentSponsor.industry}
+- Sponsor Objectives: ${currentSponsor.objectives.join(', ')}`;
+
+  const response = await callGeminiAPI(prompt, systemPrompt);
+  hideLoadingSpinner();
+
+  if (response) {
+    addSystemMessageToChat(response);
+  } else {
+    addSystemMessageToChat("AI could not generate points. Please try again.");
+  }
+};
+
+/* ---------- initial population ---------- */
+populateEventsForSponsor();
+function ensureOrganizerViewReady(){ populateSponsorFilters(); renderSponsorsList(); }
+ensureOrganizerViewReady();
+</script>
+
+</body>
+</html>
